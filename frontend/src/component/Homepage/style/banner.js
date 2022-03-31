@@ -25,5 +25,10 @@ export const useStyles = makeStyles((theme) => ({
       width: "30px",
       borderRadius: "0px",
     },
+    "& .slick-prev": { left: 0, zIndex: 2, color: "#fff" },
+    "& .slick-next": { right: 0 },
+    " & .slick-next:before, .slick-prev:before": {
+      color: theme.palette.secondary.main,
+    },
   },
 }));

@@ -18,6 +18,7 @@ export const addNewproduct = createAsyncThunk(
     }
   }
 );
+
 const initialState = {
   products: null,
   isLoading: false,

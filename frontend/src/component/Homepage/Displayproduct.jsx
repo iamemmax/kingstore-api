@@ -60,7 +60,7 @@ const Displayproduct = ({ product }) => {
   return (
     <Card
       className={cardContainer}
-      onClick={(e) => navigate(`/${product.title}`)}
+      onClick={(e) => navigate(`/product/${product.title}`)}
     >
       <CardActionArea>
         <CardMedia

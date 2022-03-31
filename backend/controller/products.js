@@ -122,7 +122,10 @@ const singleProduct = asyncHandler(async (req, res) => {
     .populate("userId", "-password");
   try {
     if (product) {
-      res.send(product);
+      console.log(product);
+      res.status(200).json({
+        product,
+      });
     }
   } catch (error) {
     res.status(501);
@@ -152,7 +155,8 @@ const categories = asyncHandler(async (req, res) => {
 // @ROUTES /products/search?
 //ACCESS public
 const searchProducts = asyncHandler(async (req, res) => {
-  res.send(req.query.search);
+  // res.send(req.query.search);
+  res.send("req.query.search");
   const keyword = req.query.search
     ? {
         $or: [
@@ -165,10 +169,10 @@ const searchProducts = asyncHandler(async (req, res) => {
         ],
       }
     : req.send("not found");
-  const search = await productSchema.find(keyword);
+  const searchItem = await productSchema.find(keyword);
   try {
-    if (search) {
-      res.send(search);
+    if (searchItem) {
+      res.send(searchItem);
     } else {
       res.send("product not found");
     }

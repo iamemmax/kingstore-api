@@ -28,3 +28,17 @@ export const getProduct = async () => {
   );
   return response.data;
 };
+export const getProductDetails = async (title) => {
+  const response = await axios.get(
+    `/api/products/${title}`,
+
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+      },
+    }
+  );
+  console.log(response.data);
+  return response.data;
+};

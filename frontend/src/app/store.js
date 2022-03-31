@@ -4,6 +4,7 @@ import verifyReducer from "../features/auth/verifySlice";
 import productReducer from "../features/Product/productSlice";
 import fetchProductSlice from "../features/Product/fetchproductSlice";
 import cartSlice from "../features/cart/cartSlice";
+import singleProduct from "../features/Product/singleProductSlice";
 // import {persistStore, persistReducer} from "redux-persist"
 import storage from "redux-persist/lib/storage";
 import {
@@ -24,6 +25,7 @@ const allReducer = combineReducers({
   newProduct: productReducer,
   products: fetchProductSlice,
   cart: cartSlice,
+  single: singleProduct,
 });
 
 const persistConfig = {

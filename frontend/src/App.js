@@ -35,7 +35,7 @@ function App() {
               <main>
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/:title" element={<SingleProduct />} />
+                  <Route path="/product/:title" element={<SingleProduct />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route
