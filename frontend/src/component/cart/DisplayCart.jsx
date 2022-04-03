@@ -42,7 +42,7 @@ function DisplayCart({ data, message }) {
         <div className="cart_product">
           <div className="img">
             <img
-              src={data?.productImgs[0].img_url}
+              src={data?.productImgs[0]?.img_url}
               component="img"
               alt={data.title}
             />

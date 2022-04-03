@@ -7,6 +7,8 @@ import Displayproduct from "../../component/Homepage/Displayproduct";
 import { fetchProducts } from "../../features/Product/fetchproductSlice";
 import { reset } from "../../features/cart/cartSlice";
 import Banner from "../../component/Homepage/Banner";
+import HomeLayout from "../../Layout/HomeLayout";
+
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,7 +28,7 @@ const Home = () => {
     });
   }
   return (
-    <>
+    <HomeLayout>
       <Banner />
       <div className="container">
         <Typography
@@ -45,7 +47,7 @@ const Home = () => {
           ))}
         </Grid>
       </div>
-    </>
+    </HomeLayout>
   );
 };
 

@@ -45,6 +45,14 @@ const cartSlice = createSlice({
       });
     },
 
+    addSingleProductToCart: (state, action) => {
+      const check = state.cart.find((res) => res._id === action.payload._id);
+      if (!check) {
+        state.cart.push(action.payload);
+        state.message = "product added successfully";
+      }
+    },
+
     reset: (state) => {
       state.message = "";
     },

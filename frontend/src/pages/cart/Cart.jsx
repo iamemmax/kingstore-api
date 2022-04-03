@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import DisplayCart from "../../component/cart/DisplayCart";
 import { useStyles } from "../../component/cart/style/cart";
+import HomeLayout from "../../Layout/HomeLayout";
 
 function Cart() {
   const { cart, message } = useSelector((state) => state.cart);
@@ -16,7 +17,7 @@ function Cart() {
 
   return (
     <Box>
-      <div>
+      <HomeLayout>
         <Typography variant="h4" component="h2" m={4} textTransform="uppercase">
           {cart?.length > 0 ? " My Shopping Cart" : " Empty Shopping Cart"}
         </Typography>
@@ -50,7 +51,7 @@ function Cart() {
             )}
           </Grid>
         </Grid>
-      </div>
+      </HomeLayout>
     </Box>
   );
 }

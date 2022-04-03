@@ -1,11 +1,5 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  UNSAFE_RouteContext,
-} from "react-router-dom";
-import Header from "./component/Header/Header";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Homepage/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
@@ -22,34 +16,30 @@ import UnProtectedRoutes from "./HOC/UnProtectedRoutes";
 import ProtectedRoutes from "./HOC/ProtectedRoutes";
 import React from "react";
 import SingleProduct from "./pages/singleProduct/SingleProduct";
+// import slugify from ""
 function App() {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <Container>
-          <Router>
-            <div className="App">
-              <header>
-                <Header />
-              </header>
-              <main>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/product/:title" element={<SingleProduct />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route
-                    path="/api/user/verify/:id/:token"
-                    element={<Verify />}
-                  />
-                  <Route path="/product/new" element={<Addproduct />} />
-                  <Route path="/cart" element={<Cart />} />
-                </Routes>
-              </main>
-            </div>
-            <ToastContainer closeOnClick autoClose={3000} />
-          </Router>
-        </Container>
+        <Router>
+          <div className="App">
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/product/:title" element={<SingleProduct />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/api/user/verify/:id/:token"
+                  element={<Verify />}
+                />
+                <Route path="/product/new" element={<Addproduct />} />
+                <Route path="/cart" element={<Cart />} />
+              </Routes>
+            </main>
+          </div>
+          <ToastContainer closeOnClick autoClose={3000} />
+        </Router>
       </ThemeProvider>
     </React.Fragment>
   );

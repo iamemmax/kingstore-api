@@ -10,11 +10,12 @@ export const useStyles = makeStyles((theme) => ({
       "& .clickImg": {
         border: "2px solid #f9f9f9",
         padding: "5px",
+        cursor: "pointer",
       },
     },
     "& .text": {
       width: "100%",
-      padding: "10px",
+      padding: "10px 20px",
 
       "& *": {
         textAlign: "left",

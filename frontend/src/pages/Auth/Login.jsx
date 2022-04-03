@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reset, LoginUser } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../component/config/Loading";
+import AuthLayout from "../../Layout/AuthLayout";
+import { Button, InputAdornment, TextField, Typography } from "@mui/material";
+import { AiFillEye } from "react-icons/ai";
+import { FaSignInAlt } from "react-icons/fa";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -13,6 +17,10 @@ const Login = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const handlePassword = (e) => {
+    setShowPassword(!showPassword);
+  };
   const handleInput = (e) => {
     setinput({ ...input, [e.target.name]: e.target.value });
   };
@@ -41,11 +49,12 @@ const Login = () => {
   if (isError && message) {
     return toast.error(message, {
       toastId: "success1",
+      position: "top-left",
     });
   }
 
   return (
-    <div>
+    <AuthLayout>
       {/* {user && (
         <>
           {" "}
@@ -56,32 +65,71 @@ const Login = () => {
           }
         </>
       )} */}
-      <h2>Login User</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <Typography variant="h5" component="h2" p={3}>
+        LOGIN ACCOUNT
+      </Typography>
+      <div className="icon-box">
+        <FaSignInAlt className="icon" />
+      </div>
+      <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
         <div className="email">
-          <input
+          <TextField
             type="text"
             name="email"
+            label="email"
             id="email"
+            fullWidth
             placeholder="Email"
-            value={email}
+            defaultValue={email}
             onChange={handleInput}
           />
         </div>
+        <br />
+        <br />
         <div className="password">
-          <input
-            type="password"
+          <TextField
+            type={showPassword ? "text" : "password"}
+            label="password"
             name="password"
+            fullWidth
             id="password"
-            value={password}
+            defaultValue={password}
             placeholder="Password"
             onChange={handleInput}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="
+                        start"
+                  id="passwordIcon"
+                  onClick={handlePassword}
+                >
+                  <AiFillEye />
+                </InputAdornment>
+              ),
+            }}
           />
         </div>
+        <br />
+        <br />
 
-        <button type="submit">Login</button>
+        <Button variant="contained" size="large" type="submit" fullWidth>
+          Login
+        </Button>
+        <br />
+        <Typography
+          variant="subtitle2"
+          textAlign="right"
+          p={2}
+          color="GrayText"
+        >
+          Not Yet a member{" "}
+          <Link to="/register" color="secondary">
+            Signup
+          </Link>
+        </Typography>
       </form>
-    </div>
+    </AuthLayout>
   );
 };
 

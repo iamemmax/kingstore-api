@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { useSelector } from "react-redux";
 import { Route, useNavigate } from "react-router-dom";
 

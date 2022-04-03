@@ -19,6 +19,7 @@ import { useStyles } from "./style/style";
 import { addToCart } from "../../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+
 const Single = ({ data }) => {
   const { wrapper } = useStyles();
   let imgBox = document.querySelector(".display-img-box");
@@ -34,7 +35,7 @@ const Single = ({ data }) => {
   // limiting qty to quantity in stock
   let quantity = [];
   let n = 1;
-  while (n <= data.totalQty) {
+  while (n <= data?.totalQty) {
     quantity.push(n);
     n++;
   }
@@ -46,7 +47,7 @@ const Single = ({ data }) => {
 
   useEffect(() => {
     cart?.map((da) => {
-      if (da._id === data._id) {
+      if (da?._id === data?._id) {
         setCartQty(da.qty);
         setButton(true);
       }
@@ -63,7 +64,6 @@ const Single = ({ data }) => {
       brand,
       productImgs,
       description,
-
       totalQty,
     } = product;
 
@@ -89,7 +89,7 @@ const Single = ({ data }) => {
     setButton(true);
   };
   return (
-    <Box key={data._id}>
+    <Box key={data?._id}>
       <Grid
         container
         className={wrapper}
@@ -100,7 +100,7 @@ const Single = ({ data }) => {
         <Grid item xs={12} sm={12} md={5} className="img-box">
           <Grid container>
             <Grid item sx={3} sm={3}>
-              {data.productImgs.map((imgs) => (
+              {data?.productImgs.map((imgs) => (
                 <img
                   src={`${imgs.img_url}`}
                   alt={`${imgs.img_id}`}
@@ -114,8 +114,8 @@ const Single = ({ data }) => {
             </Grid>
             <Grid item xs={9} sm={9} md={9}>
               <img
-                src={`${data.productImgs[0].img_url}`}
-                alt={`${data.productImgs[0].img_id}`}
+                src={`${data?.productImgs[0].img_url}`}
+                alt={`${data?.productImgs[0].img_id}`}
                 component="img"
                 height="350"
                 className="display-img-box"
@@ -125,19 +125,19 @@ const Single = ({ data }) => {
         </Grid>
         <Grid item xs={12} sm={12} md={5} className="text">
           <Typography variant="h5" component="h2">
-            {data.title}
+            {data?.title}
           </Typography>
 
-          <Typography variant="subtitle2">{data.brand}</Typography>
+          <Typography variant="subtitle2">{data?.brand}</Typography>
           <Typography variant="body1" component="h2">
-            &#x20A6; {data.price.toLocaleString("en-US")}
+            &#x20A6; {data?.price.toLocaleString("en-US")}
           </Typography>
           <Typography
             variant="subtitle2"
             className="description"
             color="GrayText"
           >
-            {data.description}
+            {data?.description}
           </Typography>
         </Grid>
 
@@ -157,7 +157,7 @@ const Single = ({ data }) => {
                 <ListItemButton>
                   <ListItemIcon>Status</ListItemIcon>
                   <ListItemText
-                    primary={data.totalQty ? "In stock" : "Out of Stock"}
+                    primary={data?.totalQty ? "In stock" : "Out of Stock"}
                   />
                 </ListItemButton>
               </ListItem>
@@ -166,9 +166,10 @@ const Single = ({ data }) => {
             <FormControl fullWidth>
               {/* <InputLabel id="demo-simple-select-label">Qty</InputLabel> */}
               <Select
+                type="number"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={button && cartQty}
+                defaultValue={qty}
                 // label="Qty"
                 onChange={(e) => setQty(e.target.value)}
                 size="small"

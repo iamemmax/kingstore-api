@@ -8,8 +8,12 @@ import {
   ProductDetails,
   reset,
 } from "../../features/Product/singleProductSlice";
+import HomeLayout from "../../Layout/HomeLayout";
+// import slugify from "react-slugify";
+
 function SingleProduct() {
   const { title } = useParams();
+  // const slug = useParams();
   const dispatch = useDispatch();
   const {
     isLoading,
@@ -23,9 +27,11 @@ function SingleProduct() {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(product && product[0]._id);
+  // console.log(product && product[0]?._id);
   return (
-    <div>{product && <Single data={product[0]} key={product[0]._id} />}</div>
+    <HomeLayout>
+      {product && <Single data={product[0]} key={product[0]?._id} />}
+    </HomeLayout>
   );
 }
 

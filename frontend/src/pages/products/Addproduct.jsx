@@ -253,7 +253,7 @@ const Addproduct = () => {
             value={productImgs}
             onChange={handleChange}
             variant="outlined"
-            multiline
+            hidden
             rows={5}
             label="productImgs"
             style={{ display: "none" }}

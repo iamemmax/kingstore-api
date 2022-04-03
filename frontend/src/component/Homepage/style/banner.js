@@ -14,11 +14,15 @@ export const useStyles = makeStyles((theme) => ({
       alignItem: "center",
       justifyContent: "center",
       marginTop: "10px",
+      textTransform: "uppercase",
+      letterSpacing: 4,
     },
     "& .price": {
-      fontSize: "14px",
+      fontSize: "16px",
       marginTop: "7px",
       marginLeft: 10,
+      color: "#eee",
+      letterSpacing: 2,
     },
     "& .slick-dots li button:before": {
       color: "#fff",
