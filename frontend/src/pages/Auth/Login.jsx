@@ -82,6 +82,7 @@ const Login = () => {
             placeholder="Email"
             defaultValue={email}
             onChange={handleInput}
+            // focused
           />
         </div>
         <br />
@@ -103,6 +104,7 @@ const Login = () => {
                         start"
                   id="passwordIcon"
                   onClick={handlePassword}
+                  style={{ cursor: "pointer" }}
                 >
                   <AiFillEye />
                 </InputAdornment>

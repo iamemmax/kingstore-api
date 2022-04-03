@@ -13,6 +13,9 @@ import {
   Typography,
   Drawer,
   Badge,
+  Avatar,
+  MenuItem,
+  Menu,
 } from "@mui/material";
 import { FaSignOutAlt, FaBars, FaCartPlus } from "react-icons/fa";
 
@@ -34,11 +37,22 @@ const Header = () => {
   const location = useLocation();
   const handleLogout = () => {
     dispatch(LogoutUser());
+    setAnchorEl(null);
   };
   const [openDrawer, setOpenDrawer] = useState(false);
   const { tabs, header, laptop, phone } = useStyles();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("lg"));
+
+  // menu
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className={header}>
       <Container>
@@ -62,6 +76,7 @@ const Header = () => {
                 <div className="search">
                   <Search id="mobileSearch" />
                 </div>
+
                 <div className="cart">
                   <Tabs>
                     <Tab
@@ -82,6 +97,24 @@ const Header = () => {
                       }
                     />
                   </Tabs>
+                </div>
+
+                <div className="user">
+                  {user && (
+                    <>
+                      <Avatar
+                        alt="Profile Img"
+                        src={user?.user?.profile[0]?.img_url}
+                        sx={{ width: 56, height: 56 }}
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </>
+                  )}
                 </div>
 
                 <div className="menu">
@@ -171,16 +204,17 @@ const Header = () => {
                   {/* </Badge> */}
                   {user && (
                     <>
-                      <li>
-                        <Button
-                          onClick={handleLogout}
-                          startIcon={<FaSignOutAlt />}
-                          variant="outline"
-                          className="logout"
-                        >
-                          Logout
-                        </Button>
-                      </li>
+                      <Avatar
+                        alt="Profile Img"
+                        src={user?.user?.profile[0]?.img_url}
+                        sx={{ width: 56, height: 56 }}
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        style={{ cursor: "pointer" }}
+                      />
                     </>
                   )}
                 </div>
@@ -188,6 +222,21 @@ const Header = () => {
             )}
           </Toolbar>
         </AppBar>
+        <div>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleClose}>My Orders</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        </div>
 
         <Toolbar />
       </Container>
