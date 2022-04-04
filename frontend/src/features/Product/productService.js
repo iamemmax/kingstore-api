@@ -28,6 +28,19 @@ export const getProduct = async () => {
   );
   return response.data;
 };
+export const TopSelling = async () => {
+  const response = await axios.get(
+    `${API_URL}/topselling`,
+
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "Application/json",
+      },
+    }
+  );
+  return response.data;
+};
 export const getProductDetails = async (title) => {
   const response = await axios.get(
     `/api/products/${title}`,

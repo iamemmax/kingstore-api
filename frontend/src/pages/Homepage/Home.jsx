@@ -4,18 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loading from "../../component/config/Loading";
 import Displayproduct from "../../component/Homepage/Displayproduct";
-import { fetchProducts } from "../../features/Product/fetchproductSlice";
+import {
+  fetchProducts,
+  fetchTopSelling,
+} from "../../features/Product/fetchproductSlice";
 import { reset } from "../../features/cart/cartSlice";
 import Banner from "../../component/Homepage/Banner";
 import HomeLayout from "../../Layout/HomeLayout";
+import DisplayTopSelling from "../../component/Homepage/DisplayTopSelling";
 
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchTopSelling());
     dispatch(reset());
   }, [dispatch]);
-  const { isLoading, products, isSuccess, message } = useSelector(
+  const { isLoading, products, isSuccess, topSelling, message } = useSelector(
     (state) => state.products
   );
 
@@ -30,6 +35,23 @@ const Home = () => {
   return (
     <HomeLayout>
       <Banner />
+      <div className="container">
+        <Typography
+          variant="h5"
+          component="h2"
+          p={5}
+          style={{ fontWeight: "600" }}
+        >
+          TOP SELLINGS
+        </Typography>
+        <Grid container spacing={2}>
+          {topSelling?.product.map((product) => (
+            <Grid item xs={5} sm={5} md={2} lg={2}>
+              <DisplayTopSelling product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
       <div className="container">
         <Typography
           variant="h5"

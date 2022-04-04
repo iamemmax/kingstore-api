@@ -122,6 +122,30 @@ const singleProduct = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+//@DESC get related product
+const RelatedProduct = asyncHandler(async (req, res) => {
+  try {
+    await productSchema
+      .find({
+        category: { $eq: req.params.category },
+        _id: { $ne: req.params.id },
+      })
+      .exec((err, related) => {
+        if (err) {
+          res.status(401);
+          console.log(err);
+        } else {
+          res.status(201).json({
+            res: "ok",
+            related,
+          });
+        }
+      });
+  } catch (error) {
+    res.status(501);
+    throw new Error(error.message);
+  }
+});
 
 // @DESC get product by category
 // @ROUTES /products/category/:category
@@ -294,4 +318,5 @@ module.exports = {
   DeleteProduct,
   updateProduct,
   topSelling,
+  RelatedProduct,
 };

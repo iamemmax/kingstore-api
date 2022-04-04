@@ -37,4 +37,9 @@ export const useStyles = makeStyles((theme) => ({
       // fontSize: 14,
     },
   },
+
+  TopSellingcardContainer: {
+    border: "none",
+    backgroundColor: "unset",
+  },
 }));

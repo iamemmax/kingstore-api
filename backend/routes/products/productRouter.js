@@ -10,6 +10,7 @@ const {
   DeleteProduct,
   updateProduct,
   topSelling,
+  RelatedProduct,
 } = require("../../controller/products");
 const upload = require("../../config/upload");
 // router.get("/s", newSearch);
@@ -21,6 +22,7 @@ router
   .delete(protect, adminAccess, DeleteProduct)
   .put(protect, adminAccess, updateProduct);
 router.get("/:title", singleProduct);
+router.get("/related/:category/:id", RelatedProduct);
 router.get("/search", searchProduct);
 
 router.get("/category/:category", categories);
