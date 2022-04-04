@@ -41,5 +41,36 @@ export const useStyles = makeStyles((theme) => ({
   TopSellingcardContainer: {
     border: "none",
     backgroundColor: "unset",
+    boxShadow: "none",
+    position: "relative",
+
+    "& .title": {
+      fontSize: "15px",
+    },
+    "& .price": {
+      fontSize: "15px",
+      marginBottom: "0px",
+      letterSpacing: 2,
+    },
+    "& .button": {
+      position: "absolute",
+      top: 0,
+      left: "50%",
+      transform: "translateX(-50%)",
+      transition: "background .5s cubic-bezier(0.075, 0.82, 0.165, 1)",
+      color: [theme.palette.primary.dark],
+      padding: "10px",
+      marginBottom: "10px",
+      fontSize: 18,
+      // transform: "scale(0)",
+
+      "&:hover": {
+        backgroundColor: [theme.palette.secondary.dark],
+        transition: "background .5s cubic-bezier(0.075, 0.82, 0.165, 1)",
+      },
+    },
+    "&:hover ~ .button": {
+      transform: "scale(1)",
+    },
   },
 }));

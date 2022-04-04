@@ -63,9 +63,13 @@ const DisplayTopSelling = ({ product }) => {
   return (
     <Card
       className={TopSellingcardContainer}
-      onClick={(e) => navigate(`/product/${product.title}`)}
+
+      //   style={{ backgroundColor: "unset" }}
     >
-      <CardActionArea>
+      <CardActionArea
+        onClick={(e) => navigate(`/product/${product.title}`)}
+        style={{ marginTop: "20px" }}
+      >
         <CardMedia
           component="img"
           height="250"

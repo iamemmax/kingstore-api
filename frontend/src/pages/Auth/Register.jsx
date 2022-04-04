@@ -31,67 +31,70 @@ const Register = () => {
   const handlePassword2 = (e) => {
     setShowPassword2(!showPassword2);
   };
-  const [pic, setPic] = useState([]);
+  // const [pic, setPic] = useState();
   const [loading, setLoading] = useState(false);
 
   // const [, ] = useState("");
   let proImg = [];
-  const handleImg = async (img) => {
-    setLoading(true);
-    setPic(img);
-    let data = new FormData();
 
-    data.append("file", img);
-    data.append("upload_preset", "king-store");
-    data.append("cloud_name", "dso8dzl1p");
-
-    axios
-      .post("https://api.cloudinary.com/v1_1/dso8dzl1p/image/upload", data)
-      .then((data) => {
-        let imgs = {
-          img_url: data.data.secure_url,
-          img_id: data.data.public_id,
-        };
-        proImg.push(imgs);
-        setPic(imgs);
-        setLoading(false);
-        // console.log(data);
-      });
-  };
-
-  const [input, setinput] = useState({
+  const [input, setInput] = useState({
     username: "",
     email: "",
-    profile: proImg,
+    profile: "",
     password: "",
     password2: "",
   });
 
-  // let pp = {
-  //   username,
-  //   email,
-  //   profile: pic,
-  //   password,
-  //   password2,
-  // };
-  // console.log(pp);
   const handleInput = (e) => {
-    setinput({ ...input, [e.target.name]: e.target.value });
+    setInput({ ...input, [e.target.name]: e.target.value });
   };
   const { isLoading, isError, isSuccess, message, user } = useSelector(
     (state) => state.auth
   );
+  const handleImg = async (pic) => {
+    setLoading(true);
+    if (pic === undefined) {
+      toast.error("please select an image", { toastId: "error3" });
+      return;
+    }
+    if (
+      pic.type === "image/jpeg" ||
+      pic.type === "image/png" ||
+      pic.type === "image/jpg"
+    ) {
+      let data = new FormData();
+
+      data.append("file", pic);
+      data.append("upload_preset", "king-store");
+      data.append("cloud_name", "dso8dzl1p");
+
+      axios
+        .post("https://api.cloudinary.com/v1_1/dso8dzl1p/image/upload", data)
+        .then((data) => {
+          let imgs = {
+            img_url: data.data.secure_url,
+            img_id: data.data.public_id,
+          };
+          // proImg.push(imgs);
+          // setPic(imgs.toString());
+          setInput({ ...input, profile: imgs });
+          setLoading(false);
+          // console.log(data);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   let { username, email, profile, password, password2 } = input;
 
   console.log(input);
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!pic) {
-      return toast.error("please choose a file", {
-        toastId: "error2",
-      });
-    }
+    // if (!pic) {
+    //   return toast.error("please choose a file", {
+    //     toastId: "error2",
+    //   });
+    // }
     dispatch(registerUser(input));
   };
   useEffect(() => {
@@ -135,21 +138,12 @@ const Register = () => {
         <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
           <TextField
             name="profile"
-            value={profile}
+            defaultValue={profile}
             onChange={handleInput}
             variant="outlined"
             label="profile"
             style={{ display: "none" }}
           />
-          <div className="profile">
-            <TextField
-              type="file"
-              id="profile"
-              onChange={(e) => handleImg(e.target.files[0])}
-              // inputProps={{ accept: "image/*" }}
-              fullWidth
-            />
-          </div>
 
           <br />
           <div className="userName">
@@ -242,6 +236,17 @@ const Register = () => {
               }}
             />
           </div>
+          <br />
+          <div className="profile">
+            <TextField
+              type="file"
+              id="profile"
+              onChange={(e) => handleImg(e.target.files[0])}
+              // inputProps={{ accept: "image/*" }}
+              fullWidth
+            />
+          </div>
+
           <br />
 
           <Button variant="contained" size="large" type="submit" fullWidth>

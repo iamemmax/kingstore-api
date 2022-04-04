@@ -44,9 +44,14 @@ const Home = () => {
         >
           TOP SELLINGS
         </Typography>
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="flex-start"
+          alignContent="center"
+        >
           {topSelling?.product.map((product) => (
-            <Grid item xs={5} sm={5} md={2} lg={2}>
+            <Grid item xs={6} sm={6} md={3}>
               <DisplayTopSelling product={product} />
             </Grid>
           ))}
