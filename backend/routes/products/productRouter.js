@@ -8,15 +8,20 @@ const {
   categories,
   searchProduct,
   DeleteProduct,
-  // newSearch,
+  updateProduct,
+  topSelling,
 } = require("../../controller/products");
 const upload = require("../../config/upload");
 // router.get("/s", newSearch);
 const { protect, adminAccess } = require("../../config/errorMiddlewares");
 router.route("/").get(fetchProduct);
-router.route("/").get(fetchProduct);
-router.route("/:id").delete(protect, adminAccess, DeleteProduct);
+router.route("/topselling").get(topSelling);
+router
+  .route("/:id")
+  .delete(protect, adminAccess, DeleteProduct)
+  .put(protect, adminAccess, updateProduct);
 router.get("/:title", singleProduct);
+router.get("/search", searchProduct);
 
 router.get("/category/:category", categories);
 router.post(

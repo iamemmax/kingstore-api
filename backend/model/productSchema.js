@@ -19,8 +19,10 @@ const productSchema = new mongoose.Schema({
     ref: "user",
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "category",
+    // type: mongoose.Schema.Types.ObjectId,
+
+    // ref: "category",
+    type: String,
     required: true,
     trim: true,
   },
@@ -33,6 +35,10 @@ const productSchema = new mongoose.Schema({
   totalQty: {
     type: Number,
     required: true,
+  },
+  sold: {
+    type: Number,
+    default: 0,
   },
   description: {
     type: String,

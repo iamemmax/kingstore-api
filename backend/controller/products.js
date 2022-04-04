@@ -9,6 +9,7 @@ const cloudinary = require("../config/cloudinary");
 const fetchProduct = asyncHandler(async (req, res) => {
   const getProducts = await productSchema
     .find()
+    .sort({ createdAt: "-1" })
     .populate("userId", "-password");
   if (getProducts.length > 0) {
     res.status(200).json({
@@ -48,7 +49,7 @@ const Addproduct = asyncHandler(async (req, res) => {
   const {
     title,
     price,
-    totalQty,
+    sold,
     description,
     brand,
     category,
@@ -179,12 +180,111 @@ const DeleteProduct = asyncHandler(async (req, res) => {
 
   try {
     if (product) {
-      cloudinary.uploader.destroy(product.productImgs[0].img_id);
-      // await productSchema.
+      product.productImgs.map((img) => {
+        console.log(img.img_id);
+        cloudinary.uploader.destroy(img.img_id);
+      });
+      await productSchema
+        .findByIdAndDelete(req.params.id)
+        .exec((err, product) => {
+          if (err) {
+            res.status(401);
+            throw new Error("unable to delete product");
+          } else {
+            res.status(201).json({
+              message: `${product.title} deleted successfully`,
+              product,
+            });
+          }
+        });
     }
-  } catch (error) {}
+  } catch (error) {
+    res.status(401);
+    throw new Error(error.message);
+  }
+});
+//@DESC get update product
+//@ROUTS /products/:id
+const updateProduct = asyncHandler(async (req, res) => {
+  const product = await productSchema.findById(req.params.id);
+  let = {
+    title,
+    price,
+    totalQty,
+    description,
+    brand,
+    category,
+    productImgs,
+    userId,
+    sold,
+  } = req.body;
+
+  try {
+    if (product) {
+      await productSchema
+        .findByIdAndUpdate(
+          { _id: req.params.id },
+          {
+            $set: {
+              title: title || product.title,
+              description: description || product.description,
+              category: category || product.category,
+              productImgs: productImgs || product.productImgs,
+              userId: userId || product.userId,
+            },
+            $inc: {
+              price: price || product.price,
+              totalQty: totalQty || product.totalQty,
+              sold: sold || product.sold,
+            },
+          },
+          { new: true }
+        )
+        .exec((err, product) => {
+          if (err) {
+            res.status(401);
+            throw new Error(err.message);
+          } else {
+            product.productImgs.map((img) => {
+              console.log(img.img_id);
+              cloudinary.uploader.destroy(img.img_id);
+            });
+            res.status(201).json({
+              message: `${product.title} updated successfully`,
+              product,
+            });
+          }
+        });
+    }
+  } catch (error) {
+    res.status(401);
+    throw new Error(error.message);
+  }
 });
 
+//@DESC get fetch top selling products
+//@ROUTS /products
+
+const topSelling = asyncHandler(async (req, res) => {
+  // let order = req.query.order ? req.query.order : "asc";
+  // let sortBy = req.query.sortBy ? req.query.sortBy : "sold";
+  // let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+  await productSchema
+    .find({ sold: { $gt: 0 } })
+    .sort("asc")
+    .exec((err, product) => {
+      if (err) {
+        res.status(401);
+        throw new Error("product not found");
+      } else {
+        res.status(201).json({
+          res: "ok",
+          product,
+        });
+      }
+    });
+});
 module.exports = {
   Addproduct,
   fetchProduct,
@@ -192,4 +292,6 @@ module.exports = {
   singleProduct,
   categories,
   DeleteProduct,
+  updateProduct,
+  topSelling,
 };
