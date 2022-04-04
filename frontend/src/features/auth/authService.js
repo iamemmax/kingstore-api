@@ -7,6 +7,7 @@ export const register = async (userData) => {
       "Access-Control-Allow-Origin": "*",
       "Content-type": "Application/json",
     },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -17,11 +18,14 @@ export const login = async (userData) => {
       "Access-Control-Allow-Origin": "*",
       "Content-type": "Application/json",
     },
+    withCredentials: true,
   });
   return response.data;
 };
 
 export const logout = async () => {
-  const response = await axios.post(`${API_URL}/logout`);
+  const response = await axios.post(`${API_URL}/logout`, {
+    withCredentials: true,
+  });
   return response.data;
 };

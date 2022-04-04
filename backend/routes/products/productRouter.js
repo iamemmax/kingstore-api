@@ -6,14 +6,25 @@ const {
   fetchProduct,
   singleProduct,
   categories,
-  searchProducts,
-  newSearch,
+  searchProduct,
+  DeleteProduct,
+  // newSearch,
 } = require("../../controller/products");
 const upload = require("../../config/upload");
-const { protect } = require("../../config/errorMiddlewares");
-router.route("/").get(fetchProduct).get(searchProducts);
+// router.get("/s", newSearch);
+const { protect, adminAccess } = require("../../config/errorMiddlewares");
+router.route("/").get(fetchProduct);
+router.route("/").get(fetchProduct);
+router.route("/:id").delete(protect, adminAccess, DeleteProduct);
 router.get("/:title", singleProduct);
+
 router.get("/category/:category", categories);
-router.post("/new", upload.array("productImg", 6), Addproduct);
+router.post(
+  "/new",
+  upload.array("productImg", 6),
+  protect,
+  adminAccess,
+  Addproduct
+);
 // router.route("/");
 module.exports = router;

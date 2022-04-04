@@ -7,19 +7,15 @@ const asyncHandler = require("express-async-handler");
 const fs = require("fs");
 const sendMail = require("../config/sendEmail");
 const crypto = require("crypto");
+const cloudinary = require("../config/cloudinary");
 
 exports.addUser = asyncHandler(async (req, res) => {
-  let { username, email, password, password2 } = req.body;
+  let { username, email, profile, password, password2 } = req.body;
 
   // @desc check if user fill all filled
-  if (!username || !email || !password || !password2) {
+  if (!username || !email || !profile || !password || !password2) {
     res.status(401);
     throw new Error("Please fill all field");
-  }
-  // @desc check if user upload a file
-  if (!req.file) {
-    res.status(401);
-    throw new Error("Please choose a file");
   }
 
   // @desc check if user enter valid email
@@ -43,25 +39,15 @@ exports.addUser = asyncHandler(async (req, res) => {
     const userExist = await userSchema.findOne({ username: username });
     const emailExist = await userSchema.findOne({ email: email });
     if (userExist) {
-      fs.unlinkSync(req.file.path);
       res.status(401);
       throw new Error("username already exist");
     }
     // @desc check if email already exist
     else if (emailExist) {
-      fs.unlinkSync(req.file.path);
       return res.status(401).json({
         message: "email already exist",
       });
     } else {
-      await sharp(req.file.path)
-        .resize(100, 100)
-        .png({ quality: 90, force: true })
-        .toFile(`./frontend/public/upload/${req.file.filename}.png`);
-
-      await fs.unlinkSync(req.file.path);
-      //  sharp.cache(false);
-
       bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(password, salt, async (err, hash) => {
           // Store hash in your password DB.
@@ -69,10 +55,11 @@ exports.addUser = asyncHandler(async (req, res) => {
           crypto.randomBytes(48, async (err, buffer) => {
             let token = buffer.toString("hex");
 
+            console.log(req.body);
             let newUser = await new userSchema({
               username,
               email,
-              profile: req.file.filename,
+              profile,
               password: hash,
             });
 
@@ -198,9 +185,15 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 //@access public
 //@route http://localhost:5000/api/user/logout
 exports.logoutUser = (req, res) => {
-  req.logout();
-  res.status(201).json({
-    message: "you successfully logout",
+  req.logOut();
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid", {
+      path: "/",
+      httpOnly: true,
+    });
+    res.status(201).json({
+      message: "you successfully logout",
+    });
   });
 };
 
@@ -208,39 +201,37 @@ exports.logoutUser = (req, res) => {
 //@access private
 //@route http://localhost:5000/api/user/:id
 
-// exports.updateUser = asyncHandler(async (req, res) => {
-//   const user = await userSchema.findById(req.params.id);
-//   let { address, city, country, posterCode, phone } = req.body;
-//   if (!address || !city || !country || !posterCode || !phone) {
-//     res.status(401);
-//     throw new Error("please fill all field");
-//   }
+exports.updateReguser = asyncHandler(async (req, res) => {
+  const user = await userSchema.findById(req.params.id);
+  let { address, city, country, posterCode, phone, profile } = req.body;
 
-//   const updatedUser = await userSchema.findByIdAndUpdate(
-//     { _id: user.id },
-//     {
-//       $set: {
-//         address: address || user.address,
-//         city: city || user.city,
-//         country: country || user.country,
-//         posterCode: posterCode || user.posterCode,
-//         phone: phone || user.phone,
-//       },
-//     },
-//     { new: true },
-//     (err, result) => {
-//       if (err) {
-//         res.status(401);
-//         throw new Error("unable to update user");
-//       } else {
-//         console.log(result);
-//         res.status(201).json({
-//           updatedUser,
-//         });
-//       }
-//     }
-//   );
-// });
+  if (profile) {
+    await cloudinary.uploader.destroy(user.profile[0].img_id);
+  }
+  const update = await userSchema.findByIdAndUpdate(
+    { _id: user.id },
+    {
+      $set: {
+        address: address || user.address,
+        city: city || user.city,
+        country: country || user.country,
+        posterCode: posterCode || user.posterCode,
+        phone: phone || user.phone,
+        profile: profile || user.profile,
+      },
+    },
+    { new: true }
+  );
+
+  try {
+    if (update) {
+      res.send(update);
+    }
+  } catch (error) {
+    res.status(401);
+    throw new Error("unable to update user");
+  }
+});
 
 //@desc get user by id
 //@access private
@@ -288,11 +279,14 @@ exports.getAllUsers = asyncHandler(async (req, res) => {
 //@route http://localhost:5000/api/user/delete/:id
 exports.deleteUser = asyncHandler(async (req, res) => {
   try {
+    let regUser = await userSchema.findOne({ _id: req.params.id });
+
     const user = await userSchema.findByIdAndDelete(req.params.id);
     if (!user) {
       res.status(401);
       throw new Error("user not found");
     } else {
+      await cloudinary.uploader.destroy(regUser.profile[0].img_id);
       return res.status(201).json({
         user: req.user,
       });

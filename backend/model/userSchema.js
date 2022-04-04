@@ -11,10 +11,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
 
-  profile: {
-    type: String,
-    required: true,
-  },
+  profile: [],
   password: {
     type: String,
     required: true,

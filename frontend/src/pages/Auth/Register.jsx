@@ -31,36 +31,34 @@ const Register = () => {
   const handlePassword2 = (e) => {
     setShowPassword2(!showPassword2);
   };
-  const [pic, setPic] = useState();
+  const [pic, setPic] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // const [, ] = useState("");
-
   let proImg = [];
   const handleImg = async (img) => {
     setLoading(true);
-
+    setPic(img);
     let data = new FormData();
 
     data.append("file", img);
     data.append("upload_preset", "king-store");
     data.append("cloud_name", "dso8dzl1p");
 
-    let cloudeney = await axios.post(
-      "https://api.cloudinary.com/v1_1/dso8dzl1p/image/upload",
-      data
-    );
-    if (cloudeney) {
-      let data = {
-        img_url: cloudeney.data.secure_url,
-        img_id: cloudeney.data.public_id,
-      };
-      proImg.push(data);
-      setPic(proImg);
-      setLoading(false);
-      // console.log(data);
-    }
+    axios
+      .post("https://api.cloudinary.com/v1_1/dso8dzl1p/image/upload", data)
+      .then((data) => {
+        let imgs = {
+          img_url: data.data.secure_url,
+          img_id: data.data.public_id,
+        };
+        proImg.push(imgs);
+        setPic(imgs);
+        setLoading(false);
+        // console.log(data);
+      });
   };
+
   const [input, setinput] = useState({
     username: "",
     email: "",
@@ -68,6 +66,15 @@ const Register = () => {
     password: "",
     password2: "",
   });
+
+  // let pp = {
+  //   username,
+  //   email,
+  //   profile: pic,
+  //   password,
+  //   password2,
+  // };
+  // console.log(pp);
   const handleInput = (e) => {
     setinput({ ...input, [e.target.name]: e.target.value });
   };
@@ -126,6 +133,25 @@ const Register = () => {
           <FaSignInAlt className="icon" />
         </div>
         <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
+          <TextField
+            name="profile"
+            value={profile}
+            onChange={handleInput}
+            variant="outlined"
+            label="profile"
+            style={{ display: "none" }}
+          />
+          <div className="profile">
+            <TextField
+              type="file"
+              id="profile"
+              onChange={(e) => handleImg(e.target.files[0])}
+              // inputProps={{ accept: "image/*" }}
+              fullWidth
+            />
+          </div>
+
+          <br />
           <div className="userName">
             <TextField
               type="text"
@@ -216,24 +242,6 @@ const Register = () => {
               }}
             />
           </div>
-          <br />
-          <TextField
-            name="profile"
-            value={profile}
-            onChange={handleInput}
-            variant="outlined"
-            label="profile"
-            style={{ display: "none" }}
-          />
-          <div className="profile">
-            <TextField
-              type="file"
-              id="profile"
-              onChange={(e) => handleImg(e.target.files[0])}
-              fullWidth
-            />
-          </div>
-
           <br />
 
           <Button variant="contained" size="large" type="submit" fullWidth>

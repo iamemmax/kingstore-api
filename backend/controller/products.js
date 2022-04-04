@@ -17,6 +17,32 @@ const fetchProduct = asyncHandler(async (req, res) => {
     });
   }
 });
+//@DESC filter product
+//@ROUTS /products?search=emmax
+const searchProduct = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { title: { $regex: req.query.search, $options: "i" } },
+          { category: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  try {
+    const search = await productSchema.find(keyword);
+    if (!search) {
+      res.status(400);
+      throw new Error("products not found");
+    }
+    res.status(201).json({
+      count: search.length,
+      search,
+    });
+  } catch (error) {
+    res.status(501);
+    throw new Error(error.message);
+  }
+});
 
 const Addproduct = asyncHandler(async (req, res) => {
   const {
@@ -44,43 +70,6 @@ const Addproduct = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("please fill all field");
   }
-
-  // if (!req.files) {
-  //   res.status(401);
-  //   throw new Error("please choose a product image(s)");
-  // }
-  // if (req.files.length > 6) {
-  //   res.status(401);
-  //   throw new Error("upload maximum of six (s) images");
-  // }
-
-  // rezising images
-  // let productPix = [];
-
-  // let myfiles = req.files;
-  // for (let i = 0; i < myfiles.length; i++) {
-  //   const file = myfiles[i];
-  //   await sharp(file.path)
-  //     .flatten({ background: { r: 255, g: 255, b: 255, alpha: 0 } })
-  //     .resize(500, 500)
-  //     .png({ quality: 90, force: true });
-
-  //   // .toFile(`./backend/public/product/${file.filename}.png`);
-  //   // const result = await cloudinary.uploader.upload(file.path);
-
-  //   // if (!result) {
-  //   //   res.status(401);
-  //   //   throw new Error("image uploading failed");
-  //   // }
-  //   // const dbFile = {
-  //   //   filename: file.originalname,
-  //   //   // cloudinary_id: result.public_id,
-  //   //   // img_url: result.secure_url,
-  //   // };
-  //   productPix.push(file.originalname);
-  //   fs.unlinkSync(file.path);
-  // }
-  // console.log(req.files);
 
   try {
     const productExist = await productSchema.findOne({ title: { $eq: title } });
@@ -149,46 +138,58 @@ const categories = asyncHandler(async (req, res) => {
     res.status(501);
     throw new Error(error.message);
   }
+  // });
+
+  // @DESC search products
+  // @ROUTES /products/search?
+  //ACCESS public
+  // const searchProducts = asyncHandler(async (req, res) => {
+  // res.send(req.query.search);
+  // res.send("hello");
+
+  // const keyword = req.query.search
+  //   ? {
+  //       $or: [
+  //         {
+  //           title: { $regex: req.query.title, $opt: "i" },
+  //           category: { $regex: req.query.category, $opt: "i" },
+  //           brand: { $regex: req.query.brand, $opt: "i" },
+  //           price: { $regex: req.query.price, $opt: "i" },
+  //         },
+  //       ],
+  //     }
+  //   : req.send("not found");
+  // const searchItem = await productSchema.find(keyword);
+  // try {
+  //   if (searchItem) {
+  //     res.send(searchItem);
+  //   } else {
+  //     res.send("product not found");
+  //   }
+  // } catch (error) {
+  //   res.status(501);
+  //   throw new Error(error.message);
+  // }
 });
 
-// @DESC search products
-// @ROUTES /products/search?
-//ACCESS public
-const searchProducts = asyncHandler(async (req, res) => {
-  // res.send(req.query.search);
-  res.send("req.query.search");
-  const keyword = req.query.search
-    ? {
-        $or: [
-          {
-            title: { $regex: req.query.title, $opt: "i" },
-            category: { $regex: req.query.category, $opt: "i" },
-            brand: { $regex: req.query.brand, $opt: "i" },
-            price: { $regex: req.query.price, $opt: "i" },
-          },
-        ],
-      }
-    : req.send("not found");
-  const searchItem = await productSchema.find(keyword);
+//@DESC get delete product
+//@ROUTS /products/:id
+const DeleteProduct = asyncHandler(async (req, res) => {
+  const product = await productSchema.findById(req.params.id);
+
   try {
-    if (searchItem) {
-      res.send(searchItem);
-    } else {
-      res.send("product not found");
+    if (product) {
+      cloudinary.uploader.destroy(product.productImgs[0].img_id);
+      // await productSchema.
     }
-  } catch (error) {
-    res.status(501);
-    throw new Error(error.message);
-  }
+  } catch (error) {}
 });
-const newSearch = asyncHandler(async (req, res) => {
-  console.log(req.query.search);
-});
+
 module.exports = {
   Addproduct,
   fetchProduct,
+  searchProduct,
   singleProduct,
   categories,
-  searchProducts,
-  newSearch,
+  DeleteProduct,
 };

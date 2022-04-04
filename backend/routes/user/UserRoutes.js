@@ -9,13 +9,14 @@ const {
   getUser,
   deleteUser,
   getAllUsers,
-  updatedUser,
+  updateReguser,
 } = require("../../controller/user");
 const upload = require("../../config/upload");
 router.post("/register", upload.single("profile"), addUser);
 router.post("/login", loginUser);
 router.get("/allUsers", protect, adminAccess, getAllUsers);
 router.get("/:id", protect, getUser);
+router.put("/:id", protect, updateReguser);
 router.put("/verify/:id/:token", activateUser);
 router.delete("/delete/:id", adminAccess, deleteUser);
 // router.put("/edit/:id", protect, updatedUser);

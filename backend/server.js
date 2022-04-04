@@ -20,7 +20,7 @@ db();
 app.use(
   session({
     secret: process.env.SECRETE,
-    cookie: { maxAge: 3600000 },
+    cookie: { maxAge: 3600000, path: "/" },
     resave: true,
     saveUninitialized: true,
   })
@@ -35,6 +35,7 @@ app.use(passport.session());
 
 app.use("/api/user", require("./routes/user/UserRoutes"));
 app.use("/api/products", require("./routes/products/productRouter"));
+app.use("/api/category", require("./routes/category/categoryRouter"));
 app.use(errorHandler);
 
 // @DESC  port list
