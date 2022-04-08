@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { reset, UPDATE_USER_PROFILE } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Country, State, City } from "country-state-city";
+
 import Loading from "../../component/config/Loading";
 import swal from "sweetalert";
 import { CircularProgress, Grid } from "@mui/material";
@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import { Country, State, City } from "country-state-city";
 import axios from "axios";
 import UserLayout from "../../Layout/UserLayout";
 
@@ -22,6 +23,12 @@ const UpdateProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const { id } = useParams();
+
+  // let countryList = require("country-state-city").Country;
+  // let stateList = require("country-state-city").State;
+
+  // console.log(Country.getAllCountries());
+  // console.log(State.getAllStates());
 
   // const [pic, setPic] = useState();
   const [loading, setLoading] = useState(false);
@@ -83,6 +90,24 @@ const UpdateProfile = () => {
     let data = { input };
     dispatch(UPDATE_USER_PROFILE(data));
   };
+
+  const [countryLists, setCountryLists] = useState([]);
+  const [stateLists, setStateLists] = useState([]);
+  const [cityLists, setCityLists] = useState([]);
+
+  useEffect(() => {
+    setCountryLists(Country.getAllCountries());
+  }, [countryLists, stateLists]);
+
+  const handleState = (e) => {
+    setStateLists(State.getStatesOfCountry(e.target.value));
+  };
+  const handleCity = (e) => {
+    // console.log(e.target);
+    setCityLists(City.getCitiesOfState(e.target.id, e.target.value));
+  };
+  console.log(stateLists);
+  console.log(cityLists);
 
   useEffect(() => {
     dispatch(reset());
@@ -214,6 +239,29 @@ const UpdateProfile = () => {
             </Grid>
           </Grid>
 
+          <br />
+          <select onChange={handleState}>
+            {countryLists.map((x, i) => (
+              <option key={i} value={x.isoCode}>
+                {x.name}
+              </option>
+            ))}
+          </select>
+          <select onChange={handleCity}>
+            {stateLists.map((x, i) => (
+              <option key={i} value={x.isoCode}>
+                {x.name}
+              </option>
+            ))}
+          </select>
+          <select>
+            {cityLists.map((x, i) => (
+              <option key={i} id={x.countryCode} value={x.isoCode}>
+                {x.name}
+              </option>
+            ))}
+          </select>
+          <br />
           <br />
 
           <TextField
