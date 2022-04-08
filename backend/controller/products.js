@@ -50,6 +50,7 @@ const Addproduct = asyncHandler(async (req, res) => {
     title,
     price,
     sold,
+    totalQty,
     description,
     brand,
     category,

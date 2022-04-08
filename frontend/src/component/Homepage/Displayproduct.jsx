@@ -14,7 +14,7 @@ import { addToCart, reset } from "../../features/cart/cartSlice";
 import { useStyles } from "./style/displayProduct";
 import { Rating } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import slugify from "react-slugify";
+// import slugify from "r";
 
 const Displayproduct = ({ product }) => {
   const { message } = useSelector((state) => state.cart);
@@ -58,7 +58,7 @@ const Displayproduct = ({ product }) => {
   }
   const navigate = useNavigate();
 
-  const slug = slugify(product.title);
+  // const slug = slugify(product.title);
   return (
     <Card
       className={cardContainer}

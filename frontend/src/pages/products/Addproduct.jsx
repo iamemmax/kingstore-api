@@ -11,6 +11,7 @@ import {
   Typography,
   Grid,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import { reset, addNewproduct } from "../../features/Product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -134,7 +135,17 @@ const Addproduct = () => {
 
   if (isSuccess && newProduct) {
     setTimeout(() => {
-      navigate("/");
+      setInput({
+        title: "",
+        brand: "",
+        price: "",
+        category: "none",
+        totalQty: "",
+        description: "",
+        userId: user._id,
+        productImgs: "",
+      });
+      setCloud([]);
     }, 4000);
     return toast.success(newProduct.message, {
       toastId: "success1",
@@ -280,7 +291,7 @@ const Addproduct = () => {
           />
 
           <Button variant="contained" color="secondary" type="submit" fullWidth>
-            {loading ? "uploading Images" : "Add Images Product"}
+            {loading ? <CircularProgress /> : "Add  Product"}
           </Button>
         </form>
       </Box>

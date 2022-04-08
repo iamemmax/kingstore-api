@@ -1,23 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
+import { Outlet, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Route, useNavigate } from "react-router-dom";
+const UnProtectedRoutes = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  // const navigate = useNavigate();
 
-function UnProtectedRoutes({ component: Component, ...rest }) {
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
-  return (
-    <React.Fragment>
-      <Route
-        {...rest}
-        render={(props) => {
-          if (user) {
-            return navigate("/");
-          }
-          return <Component {...props} />;
-        }}
-      />
-    </React.Fragment>
-  );
-}
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+};
 
 export default UnProtectedRoutes;

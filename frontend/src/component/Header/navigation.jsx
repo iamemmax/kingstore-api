@@ -26,10 +26,3 @@ export const rightNav = [
     icons: <FaSign />,
   },
 ];
-export const authNav = [
-  {
-    name: "Dashboard",
-    path: "/dashboard",
-    icons: <FaSignInAlt />,
-  },
-];

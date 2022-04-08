@@ -1,4 +1,4 @@
-import { mainNav, rightNav, authNav } from "./navigation";
+import { mainNav, rightNav } from "./navigation";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LogoutUser } from "../../features/auth/authSlice";
@@ -152,33 +152,20 @@ const Header = () => {
 
                 <div className="rightNav">
                   <Tabs>
-                    {!user
-                      ? rightNav?.map((nav, index) => (
-                          <Tab
-                            key={index}
-                            label={nav.name}
-                            icon={nav.icons}
-                            classes={{ root: tabs }}
-                            iconPosition="start"
-                            className={
-                              location.pathname === nav.path ? "active" : "link"
-                            }
-                            onClick={(e) => navigate(nav.path)}
-                          />
-                        ))
-                      : authNav?.map((nav, index) => (
-                          <Tab
-                            icon={nav.icons}
-                            label={nav.name}
-                            key={index}
-                            classes={{ root: tabs }}
-                            iconPosition="start"
-                            className={
-                              location.pathname === nav.path ? "active" : "link"
-                            }
-                            onClick={(e) => navigate(nav.path)}
-                          />
-                        ))}
+                    {!user &&
+                      rightNav?.map((nav, index) => (
+                        <Tab
+                          key={index}
+                          label={nav.name}
+                          icon={nav.icons}
+                          classes={{ root: tabs }}
+                          iconPosition="start"
+                          className={
+                            location.pathname === nav.path ? "active" : "link"
+                          }
+                          onClick={(e) => navigate(nav.path)}
+                        />
+                      ))}
                   </Tabs>
 
                   <Tabs>
@@ -207,7 +194,7 @@ const Header = () => {
                       <Avatar
                         alt="Profile Img"
                         src={user?.user?.profile[0]?.img_url}
-                        sx={{ width: 56, height: 56 }}
+                        sx={{ width: 50, height: 50 }}
                         id="basic-button"
                         aria-controls={open ? "basic-menu" : undefined}
                         aria-haspopup="true"
@@ -232,9 +219,22 @@ const Header = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>My Orders</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            {user ? (
+              <>
+                <MenuItem onClick={handleClose}>
+                  <Link to="/users/account">My account</Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  {" "}
+                  <Link to="/users/orders">My Orders</Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </>
+            ) : (
+              <MenuItem onClick={handleClose}>
+                <Link to="/users/login">Signin</Link>
+              </MenuItem>
+            )}
           </Menu>
         </div>
 

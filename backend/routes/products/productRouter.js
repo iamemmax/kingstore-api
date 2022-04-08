@@ -26,12 +26,6 @@ router.get("/related/:category/:id", RelatedProduct);
 router.get("/search", searchProduct);
 
 router.get("/category/:category", categories);
-router.post(
-  "/new",
-  upload.array("productImg", 6),
-  protect,
-  adminAccess,
-  Addproduct
-);
+router.post("/new", Addproduct);
 // router.route("/");
 module.exports = router;

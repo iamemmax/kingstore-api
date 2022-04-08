@@ -2,12 +2,18 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles((theme) => ({
   banner: {
-    height: "400px",
+    height: "450px",
     width: "100%",
     backgroundColor: [theme.palette.primary.light],
 
     "& img": {
-      margin: "0px auto",
+      margin: "20px auto",
+      backgroundColor: "#fff",
+      borderRadius: "50%",
+      padding: "10px",
+      [theme.breakpoints.down("md")]: {
+        height: "200px",
+      },
     },
     "& .text": {
       display: "flex",

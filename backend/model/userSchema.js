@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema({
   posterCode: {
     type: Number,
   },
+  state: {
+    type: String,
+  },
   address: {
     type: String,
   },

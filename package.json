@@ -17,6 +17,7 @@
     "cloudinary": "^1.28.1",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
+    "country-state-city": "^3.0.1",
     "crypto-js": "^4.1.1",
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",

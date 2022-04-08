@@ -14,7 +14,6 @@ import { addToCart, reset } from "../../features/cart/cartSlice";
 import { useStyles } from "./style/displayProduct";
 import { Rating } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import slugify from "react-slugify";
 import { FaShoppingCart } from "react-icons/fa";
 
 const DisplayTopSelling = ({ product }) => {
@@ -59,7 +58,6 @@ const DisplayTopSelling = ({ product }) => {
   }
   const navigate = useNavigate();
 
-  const slug = slugify(product.title);
   return (
     <Card
       className={TopSellingcardContainer}

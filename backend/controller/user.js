@@ -203,7 +203,7 @@ exports.logoutUser = (req, res) => {
 
 exports.updateReguser = asyncHandler(async (req, res) => {
   const user = await userSchema.findById(req.params.id);
-  let { address, city, country, posterCode, phone, profile } = req.body;
+  let { address, city, state, country, posterCode, phone, profile } = req.body;
 
   if (profile) {
     await cloudinary.uploader.destroy(user.profile[0].img_id);
@@ -214,6 +214,7 @@ exports.updateReguser = asyncHandler(async (req, res) => {
       $set: {
         address: address || user.address,
         city: city || user.city,
+        state: state || user.state,
         country: country || user.country,
         posterCode: posterCode || user.posterCode,
         phone: phone || user.phone,
@@ -225,11 +226,64 @@ exports.updateReguser = asyncHandler(async (req, res) => {
 
   try {
     if (update) {
-      res.send(update);
+      res.status(200).json({
+        user: update,
+      });
+    } else {
+      res.status(401);
+      throw new Error("error in updating");
     }
   } catch (error) {
     res.status(401);
-    throw new Error("unable to update user");
+    throw new Error(error.message);
+  }
+});
+//@desc change password
+//@access private
+//@route http://localhost:5000/api/user/password/:id
+exports.ChangePassword = asyncHandler(async (req, res) => {
+  let { oldpassword, password1 } = req.body;
+
+  const user = await userSchema.findOne({ _id: req.params.id });
+  if (user) {
+    try {
+      bcrypt.compare(oldpassword, user.password, (err, isMatch) => {
+        if (!isMatch) {
+          res.send("old password not matched");
+        }
+        if (isMatch) {
+          bcrypt.genSalt(10, function (err, salt) {
+            bcrypt.hash(password1, salt, async (errr, hash) => {
+              if (user.password === hash) {
+                res.send("error");
+                return;
+              }
+              let update = await userSchema.findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: { password: hash || user.password } },
+                { new: true }
+              );
+              if (!update) {
+                // res.send("unable to update pass");
+                res.status(401).json({
+                  message: "unable to update  password ",
+                });
+              } else {
+                res.status(201).json({
+                  user,
+                });
+              }
+            });
+          });
+        }
+      });
+    } catch (error) {
+      res.status(501);
+      throw new Error(error.message);
+    }
+  } else {
+    res.status(401);
+    throw new Error("user not found");
   }
 });
 

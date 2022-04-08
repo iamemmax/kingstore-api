@@ -3,7 +3,7 @@ const API_URL = "api/products";
 
 export const Addproduct = async (userData) => {
   const response = await axios.post(
-    `http://localhost:5000/api/products//new`,
+    `http://localhost:5000/api/products/new`,
     userData,
     {
       headers: {

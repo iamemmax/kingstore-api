@@ -12,6 +12,7 @@ import { reset } from "../../features/cart/cartSlice";
 import Banner from "../../component/Homepage/Banner";
 import HomeLayout from "../../Layout/HomeLayout";
 import DisplayTopSelling from "../../component/Homepage/DisplayTopSelling";
+import Advert1 from "../../component/Homepage/Advert/Advert1";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,9 @@ const Home = () => {
             </Grid>
           ))}
         </Grid>
+      </div>
+      <div className="advert">
+        <Advert1 />
       </div>
       <div className="container">
         <Typography
