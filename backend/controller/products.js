@@ -1,9 +1,10 @@
 const asyncHandler = require("express-async-handler");
-const sharp = require("sharp");
+// const sharp = require("sharp");
 const fs = require("fs");
 const productSchema = require("../model/productSchema");
 const path = require("path");
 const cloudinary = require("../config/cloudinary");
+
 
 // fetch all products
 const fetchProduct = asyncHandler(async (req, res) => {

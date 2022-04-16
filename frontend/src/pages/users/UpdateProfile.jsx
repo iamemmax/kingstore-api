@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reset, UPDATE_USER_PROFILE } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Loading from "../../component/config/Loading";
 import swal from "sweetalert";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import {
   Box,
   Button,
   InputAdornment,
   TextField,
   Typography,
+  
 } from "@mui/material";
 
 import { Country, State, City } from "country-state-city";
@@ -22,15 +23,7 @@ import UserLayout from "../../Layout/UserLayout";
 const UpdateProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { id } = useParams();
-
-  // let countryList = require("country-state-city").Country;
-  // let stateList = require("country-state-city").State;
-
-  // console.log(Country.getAllCountries());
-  // console.log(State.getAllStates());
-
-  // const [pic, setPic] = useState();
+ 
   const [loading, setLoading] = useState(false);
   const { isLoading, isError, isSuccess, message, user } = useSelector(
     (state) => state.auth
@@ -38,14 +31,12 @@ const UpdateProfile = () => {
 
   const [input, setInput] = useState({
     profile: "",
-    country: user.user.country || "",
-    city: user.user.city || "",
-    state: user.user.state || "",
     address: user.user.address || "",
     posterCode: user.user.posterCode || "",
     phone: user.user.phone || "",
   });
 
+  
   const handleInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -73,42 +64,62 @@ const UpdateProfile = () => {
             img_url: data.data.secure_url,
             img_id: data.data.public_id,
           };
-          // proImg.push(imgs);
-          // setPic(imgs.toString());
+         
           setInput({ ...input, profile: imgs });
           setLoading(false);
           // console.log(data);
         })
         .catch((err) => console.log(err));
-    }
+      }
   };
 
-  let { profile, country, state, city, posterCode, address, phone } = input;
+  let { profile,  posterCode, address, phone } = input;
 
+
+  const [countryLists, setCountryLists] = useState([]);
+  const [country, setCountry] = useState(user?.user?.country ||"")
+  const [contryCodes, setContryCodes] = useState("");
+  const [stateLists, setStateLists] = useState([]);
+  const [state, setState] = useState(user?.user?.state || "")
+  const [cityLists, setCityLists] = useState([]);
+  const [city, setCity] = useState(user?.user?.city || "")
+  
+  
+  const handleCountry =  (e) => {
+    setContryCodes(e.target.value)
+    setStateLists(State.getStatesOfCountry(e.target.value));
+    // setLocation({...location, country: stateLists})
+    setCountry(e.target.value)
+
+  };
+  const handleState = (e) => {
+    // console.log(e.target);
+    setCityLists(City.getCitiesOfState(contryCodes, e));
+    setState(e)
+    
+    // console.log(contryCodes);
+  };
+  
+  const handleCity = (e) => {
+    // console.log(e.target);
+    setCity(e.target.value)
+    
+  };
+  useEffect(() => {
+    setCountryLists(Country.getAllCountries() );
+    setStateLists(State.getStatesOfCountry(country));
+    setCityLists(City.getCitiesOfState(country, state))
+  
+  }, [ country, state, city]);
+
+ console.log(country, city, state);
   const handleSubmit = (e) => {
     e.preventDefault();
-    let data = { input };
+    let data = { profile,  city, posterCode, address, phone, country, state };
     dispatch(UPDATE_USER_PROFILE(data));
   };
 
-  const [countryLists, setCountryLists] = useState([]);
-  const [stateLists, setStateLists] = useState([]);
-  const [cityLists, setCityLists] = useState([]);
-
-  useEffect(() => {
-    setCountryLists(Country.getAllCountries());
-  }, [countryLists, stateLists]);
-
-  const handleState = (e) => {
-    setStateLists(State.getStatesOfCountry(e.target.value));
-  };
-  const handleCity = (e) => {
-    // console.log(e.target);
-    setCityLists(City.getCitiesOfState(e.target.id, e.target.value));
-  };
-  console.log(stateLists);
-  console.log(cityLists);
-
+  // let {country, state} = location
   useEffect(() => {
     dispatch(reset());
   }, [dispatch, message, user, isSuccess]);
@@ -137,7 +148,7 @@ const UpdateProfile = () => {
       // button:close
     });
   }
-
+console.log(cityLists);
   return (
     <UserLayout>
       <Box>
@@ -180,30 +191,47 @@ const UpdateProfile = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={6}>
               <div className="country">
-                <TextField
-                  type="country"
-                  name="country"
+      
+                 <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Country</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   label="Country"
-                  // id="email"
-                  fullWidth
-                  placeholder="Country"
-                  defaultValue={country}
-                  onChange={handleInput}
-                />
+                  name="country"
+                 value={country || ""}
+                  onChange={handleCountry}
+                >
+                  {countryLists.map((x, i) => (
+                    <MenuItem key={i} value={x.isoCode}>
+                      {x.name}
+                    </MenuItem>
+                  ))}
+                 
+                </Select>
+              </FormControl>
               </div>
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
               <div className="state">
-                <TextField
-                  type="text"
-                  name="state"
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">State</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   label="State"
-                  id="state"
-                  placeholder="state"
-                  defaultValue={state}
-                  onChange={handleInput}
-                  fullWidth
-                />
+                  name="state"
+                 value={state || ""}
+                  onChange={(e) => handleState(e.target.value)}
+                >
+                  {stateLists.map((x, i) => (
+                    <MenuItem key={i} value={x.isoCode}>
+                      {x.name}
+                    </MenuItem>
+                  ))}
+                 
+                </Select>
+              </FormControl>
               </div>
             </Grid>
           </Grid>
@@ -211,16 +239,32 @@ const UpdateProfile = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={6}>
               <div className="city">
-                <TextField
-                  type="city"
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">City</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="City"
                   name="city"
-                  label="city"
-                  id="city"
-                  fullWidth
-                  placeholder="city"
-                  defaultValue={city}
-                  onChange={handleInput}
-                />
+                 value={city || ""}
+                  onChange={handleCity}
+                >
+                  {cityLists.map((x, i) => (
+                    <MenuItem key={i} value={x.name}>
+                      {x.name}
+                    </MenuItem>
+                  ))}
+                 
+                </Select>
+              </FormControl>
+
+               {/* <select onChange={(e) =>handleCity(e.target.value)} value={city}>
+            {cityLists.map((x, i) => (
+              <option key={i} id={x.countryCode} value={x.isoCode}>
+                {x.name}
+              </option>
+            ))}
+          </select> */}
               </div>
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
@@ -240,7 +284,7 @@ const UpdateProfile = () => {
           </Grid>
 
           <br />
-          <select onChange={handleState}>
+          {/* <select onChange={handleCountry}>
             {countryLists.map((x, i) => (
               <option key={i} value={x.isoCode}>
                 {x.name}
@@ -262,7 +306,7 @@ const UpdateProfile = () => {
             ))}
           </select>
           <br />
-          <br />
+          <br /> */}
 
           <TextField
             name="profile"

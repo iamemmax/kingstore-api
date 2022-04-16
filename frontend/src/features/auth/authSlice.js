@@ -50,9 +50,8 @@ export const UPDATE_USER_PROFILE = createAsyncThunk(
   async (data, thunkAPI) => {
     const id = thunkAPI.getState().auth.user.user._id;
     // console.log(userId);
-    let { input } = data;
+    let {  country, state, city, posterCode, address, phone, profile } = data;
     console.log(data);
-    let { country, state, city, posterCode, address, phone, profile } = input;
     try {
       const response = await axios.put(
         `http://localhost:5000/api/user/update/${id}`,

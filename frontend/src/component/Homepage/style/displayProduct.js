@@ -52,6 +52,10 @@ export const useStyles = makeStyles((theme) => ({
       marginBottom: "0px",
       letterSpacing: 2,
     },
+    "& img": {
+      // height:"100%",
+      // border:"2px solid red"
+    },
     "& .button": {
       position: "absolute",
       top: 0,

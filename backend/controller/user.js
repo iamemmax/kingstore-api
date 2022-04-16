@@ -1,4 +1,4 @@
-const sharp = require("sharp");
+// const sharp = require("sharp");
 const userSchema = require("../model/userSchema");
 const passport = require("passport");
 const verifySchema = require("../model/verify");
