@@ -4,11 +4,14 @@ export const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: "10px",
 
+    // "& > div":{border:"2px solid red"},
+
     "& .img-box": {
       border: "2px solid #eee",
+      overflow:"hidden",
       height: "100%",
       "& .clickImg": {
-        border: "2px solid #f9f9f9",
+        // border: "2px solid red",
         padding: "5px",
         cursor: "pointer",
       },

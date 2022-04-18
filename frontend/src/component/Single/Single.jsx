@@ -95,11 +95,13 @@ const Single = ({ data }) => {
         className={wrapper}
         justifyContent="space-between"
         alignItems="flex-start"
-        // spacing={3}
+        // spacing={2}
       >
-        <Grid item xs={12} sm={12} md={5} className="img-box">
+        <Grid item xs={12} sm={12} md={4} className="img-box">
+            <Box>
           <Grid container>
-            <Grid item sx={3} sm={3}>
+
+            <Grid item sx={3} sm={3} md={3}>
               {data?.productImgs.map((imgs) => (
                 <img
                   src={`${imgs.img_url}`}
@@ -117,13 +119,15 @@ const Single = ({ data }) => {
                 src={`${data?.productImgs[0].img_url}`}
                 alt={`${data?.productImgs[0].img_id}`}
                 component="img"
-                height="350"
+                height="300"
                 className="display-img-box"
               />
             </Grid>
           </Grid>
+          </Box>
+
         </Grid>
-        <Grid item xs={12} sm={12} md={5} className="text">
+        <Grid item xs={12} sm={12} md={6} className="text">
           <Typography variant="h5" component="h2">
             {data?.title}
           </Typography>

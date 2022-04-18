@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reset, LoginUser } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../component/config/Loading";
 import AuthLayout from "../../Layout/AuthLayout";
 import { Button, InputAdornment, TextField, Typography } from "@mui/material";
@@ -17,6 +17,8 @@ const Login = () => {
     password: "",
   });
 
+const location = useLocation()
+const from = location?.state?.from?.pathname || "/"
   const [showPassword, setShowPassword] = useState(false);
   const handlePassword = (e) => {
     setShowPassword(!showPassword);
@@ -40,7 +42,7 @@ const Login = () => {
   }, [dispatch, message, user, isSuccess]);
 
   if (isSuccess && user) {
-    navigate("/");
+    navigate( from, {replace:true});
   }
   if (isLoading) {
     return <Loading />;

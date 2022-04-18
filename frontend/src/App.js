@@ -26,7 +26,10 @@ import { useSelector } from "react-redux";
 
 // import slugify from ""
 function App() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  // const { isAuthenticated } = useSelector((state) => state.auth);
+  const { user}  = useSelector((state) => state.auth);
+  // const navigate = useNavigate();
+
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -41,25 +44,25 @@ function App() {
                   element={<Verify />}
                 />
                 {/* <ProtectedRoutes > */}
-                {/* <Route element={<UnProtectedRoutes />}> */}
+                <Route element={<UnProtectedRoutes  user={user?.user}/>}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                {/* </Route> */}
+                </Route>
 
-                {/* <Route element={<ProtectedRoutes />}> */}
-                <Route path="/product/new" element={<Addproduct />} />
-                <Route path="/cart" element={<Cart />} />
-                {/* users dashboard */}
-                <Route path="/users/update/:id" element={<UpdateProfile />} />
-                <Route path="/users/orders/:id" element={<Orders />} />
-                <Route path="/users/account" element={<Dashboard />} />
-                <Route path="/users/recent-view" element={<RecentViewed />} />
-                <Route
-                  path="/users/change-password/:id"
-                  element={<Password />}
-                />
-                <Route path="/users/inbox" element={<Inbox />} />
-                {/* </Route> */}
+                <Route element={<ProtectedRoutes  user={user?.user}/>}>
+                    <Route path="/product/new" element={<Addproduct />} />
+                    <Route path="/cart" element={<Cart />} />
+                    {/* users dashboard */}
+                    <Route path="/users/update/:id" element={<UpdateProfile />} />
+                    <Route path="/users/orders/:id" element={<Orders />} />
+                    <Route path="/users/account" element={<Dashboard />} />
+                    <Route path="/users/recent-view" element={<RecentViewed />} />
+                    <Route
+                      path="/users/change-password/:id"
+                      element={<Password />}
+                    />
+                    <Route path="/users/inbox" element={<Inbox />} />
+                </Route>
                 {/* </ProtectedRoutes> */}
               </Routes>
             </main>

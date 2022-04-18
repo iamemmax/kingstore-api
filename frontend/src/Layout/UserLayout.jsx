@@ -1,4 +1,4 @@
-import * as React from "react";
+import  React,{useState} from "react";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -38,7 +38,8 @@ import {
 import { useStyles } from "./styles/AuthLayoutStyles";
 import { useNavigate } from "react-router-dom";
 import { styled, alpha, useTheme } from "@mui/material/styles";
-
+import {LogoutUser} from ".././features/auth/authSlice"
+import { useDispatch } from "react-redux";
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -151,8 +152,8 @@ export default function UserLayout({ children }) {
   const { UserLayOutWrapper } = useStyles();
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
+  const [open, setOpen] = useState(false);
+const dispatch = useDispatch()
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -175,6 +176,11 @@ export default function UserLayout({ children }) {
   };
 
   const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+  const handleLogOut = () => {
+    dispatch(LogoutUser())
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -202,6 +208,7 @@ export default function UserLayout({ children }) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogOut}>Logout</MenuItem>
     </Menu>
   );
 
