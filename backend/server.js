@@ -8,24 +8,24 @@ const db = require("./config/db");
 const session = require("express-session");
 const passport = require("passport");
 const { errorHandler } = require("./config/errorMiddlewares");
-const  compression = require('compression')
+const compression = require("compression");
 
 // @DESC middlewares
-app.use(cors());
+app.use(cors({ credentials: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.urlencoded({ extended: true }));
-app.use(compression({ filter: shouldCompress }))
- 
-function shouldCompress (req, res) {
-  if (req.headers['x-no-compression']) {
+app.use(compression({ filter: shouldCompress }));
+
+function shouldCompress(req, res) {
+  if (req.headers["x-no-compression"]) {
     // don't compress responses with this request header
-    return false
+    return false;
   }
- 
+
   // fallback to standard filter function
-  return compression.filter(req, res)
+  return compression.filter(req, res);
 }
 
 // @DESC initializing datatbase
@@ -36,7 +36,7 @@ app.use(
     cookie: { maxAge: 3600000, path: "/" },
     resave: true,
     saveUninitialized: true,
-  })
+  }),
 );
 
 require("./config/passport")(passport);

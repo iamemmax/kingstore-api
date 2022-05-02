@@ -11,6 +11,7 @@ const {
   updateProduct,
   topSelling,
   RelatedProduct,
+  reviewProduct
 } = require("../../controller/products");
 const upload = require("../../config/upload");
 // router.get("/s", newSearch);
@@ -27,5 +28,6 @@ router.get("/search", searchProduct);
 
 router.get("/category/:category", categories);
 router.post("/new", Addproduct);
+router.put("/review/:id",protect, reviewProduct);
 // router.route("/");
 module.exports = router;

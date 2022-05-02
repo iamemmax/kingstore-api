@@ -9,7 +9,7 @@ import {
   reset,
 } from "../../features/Product/singleProductSlice";
 import HomeLayout from "../../Layout/HomeLayout";
-// import slugify from "react-slugify";
+import Review from "../../component/Single/Review"
 
 function SingleProduct() {
   const { title } = useParams();
@@ -31,6 +31,7 @@ function SingleProduct() {
   return (
     <HomeLayout>
       {product && <Single data={product[0]} key={product[0]?._id} />}
+      <Review />
     </HomeLayout>
   );
 }

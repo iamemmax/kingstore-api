@@ -180,9 +180,9 @@ const dispatch = useDispatch()
     handleMobileMenuClose();
   };
   const handleLogOut = () => {
-    dispatch(LogoutUser())
     setAnchorEl(null);
     handleMobileMenuClose();
+   dispatch(LogoutUser())
   };
 
   const handleMobileMenuOpen = (event) => {

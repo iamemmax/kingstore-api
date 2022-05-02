@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const productSchema = new mongoose.Schema({
+const sliderSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -45,28 +45,7 @@ const productSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-
-  productReviews:[{
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-    },
-
-    review:{
-      type:Number,
-      required:true
-    },
-    comment: {
-      type: String,
-      required: true,
-      
-    },
-    reviewDate: { type: Date, default: Date.now },
-    
-  }],
-  numReview:{type:Number,default:0},
-  rating:{type:Number,default:0},
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("products", productSchema);
+module.exports = mongoose.model("products", sliderSchema);

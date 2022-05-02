@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 // const sharp = require("sharp");
 const fs = require("fs");
 const productSchema = require("../model/productSchema");
+// const reviewSchema = require("../model/reviewSchema");
 const path = require("path");
 const cloudinary = require("../config/cloudinary");
 
@@ -311,6 +312,64 @@ const topSelling = asyncHandler(async (req, res) => {
       }
     });
 });
+
+// //@DESC product review
+const reviewProduct = asyncHandler(async (req, res) => {
+ 
+  let reviewItem = {
+        userId: req.user._id,
+        review:Number(req.body.review),
+        comment:req.body.comment
+      }
+
+     
+    const product = await productSchema.findById(req.params.id)
+
+    try {
+      if(product){
+        const alreadyReviewed = product.productReviews.find(x => x.userId.toString() === req.user._id.toString() )
+        if(alreadyReviewed){
+          res.status(401)
+          throw new Error("product already reviewed")
+          
+        }
+
+          product.productReviews.push(reviewItem)
+          product.numReview  = product.productReviews.length
+           product.rating = product.productReviews.reduce((acc, item) => item.review + acc, 0) / product.productReviews.length
+          await product.save()
+          res.status(200).json({message:"added product review"})
+
+        
+      }else{
+        res.status(401)
+          throw new Error("product not found")
+        
+      }
+    } catch (error) {
+      res.status(501)
+          throw new Error(error.message)
+        
+    }
+
+     
+            // "rating":products.productReviews.review.reduce((acc, item) => item.rating + acc, 0)/product.productReviews.review.length
+      // if(exist){
+      //   res.status(401);
+      //   throw new Error("product already review")
+      // }else{
+      //   let { userId, review, comment} = productReviews
+      //  
+      //   product.productReviews.push(reviewItem)
+      //   product.numReview = product.productReviews.length
+      //   product.rating = product.price.reduce((acc, item) => item.rating + acc, 0)/product.productReviews.length
+      // }
+    
+    
+})
+
+
+//@ROUTS /products
 module.exports = {
   Addproduct,
   fetchProduct,
@@ -321,4 +380,5 @@ module.exports = {
   updateProduct,
   topSelling,
   RelatedProduct,
+  reviewProduct
 };
