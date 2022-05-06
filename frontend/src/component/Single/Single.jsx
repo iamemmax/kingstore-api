@@ -33,12 +33,13 @@ const Single = ({ data }) => {
     }
   };
   // limiting qty to quantity in stock
-  let quantity = [];
-  let n = 1;
-  while (n <= data?.totalQty) {
-    quantity.push(n);
-    n++;
-  }
+  // let quantity = [];
+  // let n = 1;
+  // while (n <= data?.totalQty) {
+  //   quantity.push(n);
+  //   n++;
+  // }
+  // console.log([...Array(data.).keys()]);
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
@@ -179,11 +180,16 @@ const Single = ({ data }) => {
                 size="small"
                 className="selectQty"
               >
-                {quantity?.map((data) => (
+                {/* {quantity?.map((data) => (
                   <MenuItem value={`${parseInt(data)}`} key={data}>
                     {data}
                   </MenuItem>
-                ))}
+                ))} */}
+                {[...Array(data.totalQty).keys()].map(n =>(
+
+                  <MenuItem key={n+1} value={n+1}>{n+1}</MenuItem>
+                )
+                )}
               </Select>
             </FormControl>
 

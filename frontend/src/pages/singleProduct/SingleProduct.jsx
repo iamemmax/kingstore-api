@@ -31,7 +31,10 @@ function SingleProduct() {
   return (
     <HomeLayout>
       {product && <Single data={product[0]} key={product[0]?._id} />}
-      <Review />
+      <div className="review">
+      <Review  data={product[0]} key={product[0]?._id}/>
+
+      </div>
     </HomeLayout>
   );
 }

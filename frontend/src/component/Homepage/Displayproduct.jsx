@@ -15,14 +15,14 @@ import { useStyles } from "./style/displayProduct";
 import { Rating } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 // import slugify from "r";
-import slugify from "react-slugify";
+// import slugify from "react-slugify";
 
 const Displayproduct = ({ product }) => {
   const { message } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(reset());
-  }, []);
+  }, [dispatch]);
   const handleCart = (product) => {
     let {
       _id,
@@ -63,7 +63,7 @@ const Displayproduct = ({ product }) => {
   return (
     <Card
       className={cardContainer}
-      onClick={(e) => navigate(`/product/${slugify(product.title)}`)}
+      onClick={(e) => navigate(`/product/${product.title}`)}
     >
       <CardActionArea>
         <CardMedia
