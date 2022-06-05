@@ -1,5 +1,4 @@
 const express = require("express");
-require("dotenv").config();
 require("colors");
 const cors = require("cors");
 const app = express();
@@ -36,7 +35,7 @@ app.use(
     cookie: { maxAge: 3600000, path: "/" },
     resave: true,
     saveUninitialized: true,
-  }),
+  })
 );
 
 require("./config/passport")(passport);
