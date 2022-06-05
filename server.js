@@ -4,10 +4,10 @@ require("dotenv").config;
 const cors = require("cors");
 const app = express();
 const path = require("path");
-const db = require("../config/db");
+const db = require("./config/db");
 const session = require("express-session");
 const passport = require("passport");
-const { errorHandler } = require("../config/errorMiddlewares");
+const { errorHandler } = require("./config/errorMiddlewares");
 const compression = require("compression");
 
 // @DESC middlewares
@@ -41,16 +41,16 @@ app.use(
   })
 );
 
-require("../config/passport")(passport);
+require("./config/passport")(passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
 // @DESC routes
 // @ACCESS public
 
-app.use("/api/user", require("../routes/user/UserRoutes"));
+app.use("/api/user", require("./routes/user/UserRoutes"));
 app.use("/api/products", require("./routes/products/productRouter"));
-app.use("/api/category", require("../routes/category/categoryRouter"));
+app.use("/api/category", require("./routes/category/categoryRouter"));
 app.use(errorHandler);
 
 // @DESC  port list
