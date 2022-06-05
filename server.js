@@ -1,10 +1,11 @@
 const express = require("express");
 require("colors");
-require("dotenv").config;
+require("dotenv").config();
+const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const path = require("path");
-const db = require("./config/db");
+// const db = require("./config/db");
 const session = require("express-session");
 const passport = require("passport");
 const { errorHandler } = require("./config/errorMiddlewares");
@@ -31,7 +32,25 @@ app.use(express.urlencoded({ extended: true }));
 // require("dotenv").config({ path: "././.env" });
 
 // @DESC initializing datatbase
-db();
+// db();
+
+mongoose.connect(
+  process.env.DB_URL,
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  },
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("database connected successfully");
+    }
+  }
+);
+
 app.use(
   session({
     secret: process.env.SECRETE,
@@ -54,7 +73,8 @@ app.use("/api/category", require("./routes/category/categoryRouter"));
 app.use(errorHandler);
 
 // @DESC  port list
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 6000;
+
 app.listen(PORT, () => {
   console.log(`server started running on port ${PORT}`.yellow);
 });
