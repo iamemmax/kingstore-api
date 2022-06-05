@@ -1,38 +1,42 @@
 {
-  "name": "redux-toolkit",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "start": "node backend/server.js",
-    "server": "nodemon backend/server.js",
-    "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
-  },
-  "keywords": [],
-  "author": "Emmanuel Ayodeji",
-  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.28.1",
+    "cloudinary": "^1.30.0",
     "colors": "^1.4.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
-    "express": "^4.17.3",
+    "express": "^4.18.1",
     "express-async-handler": "^1.2.0",
-    "express-session": "^1.17.2",
-    "mongoose": "^6.2.2",
-    "multer": "^1.4.4",
-    "nodemailer": "^6.7.2",
-    "passport": "^0.5.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.3.5",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.5",
+    "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "sharp": "^0.30.1",
+    "sharp": "^0.30.6",
     "slugify": "^1.6.5"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0",
-    "dotenv": "^16.0.0",
-    "nodemon": "^2.0.15"
-  }
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.16"
+  },
+  "name": "kingstore",
+  "version": "1.0.0",
+  "description": "online shop backend api",
+  "main": "server.js",
+  "scripts": {
+    "start": "node  backend/server.js",
+    "dev": "nodemon  backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamemmax/kingstore-api.git"
+  },
+  "author": "Emmanuel ayodeji",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamemmax/kingstore-api/issues"
+  },
+  "homepage": "https://github.com/iamemmax/kingstore-api#readme"
 }
