@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config({ path: "./.env" });
 
 const db = asyncHandler(async () => {
   const database = await mongoose.connect(process.env.DB_URL, {
